@@ -1,4 +1,4 @@
-import "./Home.style.css"
+import "./home.style.css"
 import React, {useContext, useEffect, useState} from 'react';
 import BookService from "../service/book.service";
 import Book from "../model/book.model"
@@ -34,7 +34,7 @@ const Home =()=>{
         </article>
         <section className="section-content">
             <div>this is content part</div>
-            <BooksList/>
+            <BooksList list ={listBooks}/>
         </section>
         </>
     )
