@@ -1,13 +1,26 @@
 import "./books.style.css"
 import Book from "../model/book.model";
+import {useEffect, useState} from "react";
+import BookService from "../service/book.service";
+const BookList =()=>{
+    const [listBooks, setListBooks] = useState<Book[]>([]);
 
-type Props = {
-    list : Book[];
-};
+    useEffect(() => {
+        const fetchData = async () => {
+            const response = await BookService.getAllBooks<Book>();
+            if (response.Status) {
+                const books = response.Data.map((b: any) => new Book(b.BookId, b.Title, b.Author,b.PublicationYear , b.Isbn,b.NumberInShelf,b.NumberBorrowed));
+                setListBooks(books);
+            } else {
+                //todo : dialog to tell something went wrong
+                console.error("Error fetching books:", response.Messages, response.Exception);
+            }
+        };
 
-const BookList =(props:Props)=>{
+        fetchData();
+    }, []);
 
-const {list}=props;
+
     return(
         <div>
             <table>
@@ -17,15 +30,15 @@ const {list}=props;
                     <th>Title</th>
                     <th>Available copies</th>
                 </tr>
-                {list.map((book)=>{
+                {listBooks.map((book)=>{
                     return (
                         <tr key ={book.BookId}>
                             <td>{book.BookId}</td>
                             <td>{book.Author}</td>
                             <td>{book.Title}</td>
                             <td>{book.NumberInShelf}</td>
-                            <td>
-                                <div>
+                            <td className="tdtable">
+                                <div className="divtd">
                                     <input type="button" value="View"></input>
                                     <input type="button" value="Edit"></input>
                                     <input type="button" value="Delete"></input>
