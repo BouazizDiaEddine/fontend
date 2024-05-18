@@ -1,5 +1,6 @@
+import pubYear from "./pubYear.model";
 export default class Book {
-    BookId     :    number
+    BookId?    :    number
     Title      :     string
     Author      :    string
     PublicationYear : pubYear
@@ -20,9 +21,5 @@ export default class Book {
 
 }
 
-export class pubYear {
-    Year !: number
-    Month !: string
-}
 
 
