@@ -1,7 +1,10 @@
 import pubYear  from '../model/pubYear.model'
-import {useEffect, useState} from "react";
+import React, {FormEvent, useEffect, useState} from "react";
 import "./create.book.style.css"
 import { useNavigate } from 'react-router-dom';
+import BookService from "../service/book.service";
+import Book from "../model/book.model";
+import Response from "../model/response.model";
 interface BookDetails {
     Title: string;
     Author: string;
@@ -20,7 +23,7 @@ interface PubYearDetails {
 const CreateBook= () =>{
     const navigate = useNavigate();
     const handleBack = () => {
-        navigate('/');  // Navigate to /home using history.push
+        navigate('/');
     }
 
     const [newYear , setNewYear]=useState<PubYearDetails>({
@@ -39,6 +42,16 @@ const CreateBook= () =>{
 
 
 
+
+
+
+    const handleFormSubmit = (event: FormEvent<HTMLFormElement> ) => {
+        // Your form submission logic here
+        const response =  BookService.createBook(newBook);
+
+    };
+
+
     const handleBookChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
         setNewBook({ ...newBook, [name]: value });
@@ -53,7 +66,7 @@ const CreateBook= () =>{
 
 
     return (
-        <form>
+        <form onSubmit={handleFormSubmit}>
             <h2>Create New Book</h2>
             <div>
                 <label htmlFor="title">Title:</label>
@@ -125,7 +138,8 @@ const CreateBook= () =>{
             </div>
             <div className="form-group">
                 <input type="button" value="back" onClick={handleBack} />
-                <input type="submit" value="Create" />
+                <button type="submit">Create</button>
+
             </div>
         </form>
     )

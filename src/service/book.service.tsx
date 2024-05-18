@@ -23,8 +23,8 @@ export default class BookService {
     }
 
 
-    public static getBook<T>( param: number): Promise<Response> {
-        let res = axios.get<T>(this.baseURL + "/book/" + param)
+    public static async getBook<T>( param: number): Promise<Response> {
+        let res = await axios.get<T>(this.baseURL + "/book/" + param)
             .then((response: any) => {
                 const result = response.data;
                 if(result && result.success){
@@ -41,9 +41,8 @@ export default class BookService {
     }
 
 
-    public static createBook<T>( obj: Book): Promise<Response> {
-
-        let res = axios.post(this.baseURL + "/book/" ,obj)
+    public static createBook<T>( book: Book): Promise<Response> {
+        let res =  axios.post(this.baseURL + "/book" ,book)
             .then(response => {
                 const result = response.data;
                 if(result){
