@@ -137,7 +137,7 @@ const CreateBook= () =>{
                 />
             </div>
             <div className="form-group">
-                <input type="button" value="back" onClick={handleBack} />
+                <button type="button" value="back" onClick={handleBack} >Back</button>
                 <button type="submit">Create</button>
 
             </div>
