@@ -27,8 +27,8 @@ export default class BookService {
         let res = await axios.get<T>(this.baseURL + "/book/" + param)
             .then((response: any) => {
                 const result = response.data;
-                if(result && result.success){
-                    return new Response(true, result.data , "Success", "");
+                if(result){
+                    return new Response(true, result , "Success", "");
                 }else{
                     const msg = (result.messageList && result.messageList.length > 0) ? result.messageList[0].text: "Error";
                     return new Response(false, null, "Error", msg);
@@ -37,12 +37,12 @@ export default class BookService {
             .catch(function (error) {
                 return new Response(false, null, "Error", error);
             });
-        return res;
+        return res
     }
 
 
-    public static createBook<T>( book: Book): Promise<Response> {
-        let res =  axios.post(this.baseURL + "/book" ,book)
+    public static async createBook<T>( book: Book): Promise<Response> {
+        let res =  await axios.post(this.baseURL + "/book" ,book)
             .then(response => {
                 const result = response.data;
                 if(result){
