@@ -72,9 +72,26 @@ input[type="submit"] {
   transition: background 0.3s ease;
   margin-right: 10px;
 }
+button[type="button"],
+button[type="submit"] {
+  width: calc(50% - 10px);
+  padding: 10px;
+  background: #007BFF;
+  border: none;
+  border-radius: 5px;
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  margin-right: 10px;
+}
 
 input[type="button"]:hover,
 input[type="submit"]:hover {
+  background: #0056b3;
+}
+button[type="button"]:hover,
+button[type="submit"]:hover {
   background: #0056b3;
 }
 
