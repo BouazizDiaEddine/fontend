@@ -1,6 +1,7 @@
-import Book,{pubYear}  from '../model/book.model'
+import pubYear  from '../model/pubYear.model'
 import {useEffect, useState} from "react";
 import "./create.book.style.css"
+import { useNavigate } from 'react-router-dom';
 interface BookDetails {
     Title: string;
     Author: string;
@@ -10,8 +11,22 @@ interface BookDetails {
     PublicationYear: pubYear;
 }
 
+interface PubYearDetails {
+    Year : number
+    Month : string
+}
+
 
 const CreateBook= () =>{
+    const navigate = useNavigate();
+    const handleBack = () => {
+        navigate('/');  // Navigate to /home using history.push
+    }
+
+    const [newYear , setNewYear]=useState<PubYearDetails>({
+        Year: 1960,
+        Month: 'July',
+    })
 
     const [newBook, setNewBook] = useState<BookDetails>({
         Title: '',
@@ -19,8 +34,22 @@ const CreateBook= () =>{
         NumberInShelf: 0,
         NumberBorrowed: 0,
         Isbn:"",
-        PublicationYear:{Year: 1960, Month: "July"},
+        PublicationYear:{Year: newYear.Year, Month: newYear.Month},
     });
+
+
+
+    const handleBookChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = event.target;
+        setNewBook({ ...newBook, [name]: value });
+    };
+
+
+    const handlePubYearChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = event.target;
+        setNewYear({ ...newYear, [name]: value });
+        setNewBook(newBook);
+    };
 
 
     return (
@@ -33,7 +62,7 @@ const CreateBook= () =>{
                     name="Title"
                     id="title"
                     value={newBook.Title}
-
+                    onChange={handleBookChange}
                     required
                 />
             </div>
@@ -44,36 +73,44 @@ const CreateBook= () =>{
                     name="Author"
                     id="author"
                     value={newBook.Author}
-
+                    onChange={handleBookChange}
                     required
                 />
             </div>
-            <div className="form-group">
+            <div className="form-group" id="inShlefBorrowed">
                 <label htmlFor="numberInShelf">Number in Shelf:</label>
                 <input
                     type="number"
                     name="NumberInShelf"
                     id="numberInShelf"
                     value={newBook.NumberInShelf}
-
-                    required
+                    onChange={handleBookChange}
+                    style={{ marginRight: '10px' }}
+                />
+                <label htmlFor="numberInShelf">Number Borrowed:</label>
+                <input
+                    type="number"
+                    name="NumberBorrowed"
+                    id="NumberBorrowed"
+                    value={newBook.NumberBorrowed}
+                    onChange={handleBookChange}
                 />
             </div>
             <div className="form-group" id="publicationYear">
-                <label htmlFor="publicationYearYear">Publication Year (Optional):</label>
+                <label htmlFor="publicationYearYear">Publication Date (Optional):</label>
                 <input
                     type="number"
-                    name="PublicationYearYear"
-                    id="publicationYearYear"
-                    value={newBook.PublicationYear.Year}
-
+                    name="Year"
+                    id="Year"
+                    value={newYear.Year}
+                    onChange={handlePubYearChange}
                 />
                 <input
                     type="text"
-                    name="PublicationYearMonth"
-                    id="publicationYearMonth"
-                    value={newBook.PublicationYear.Month}
-
+                    name="Month"
+                    id="Month"
+                    value={newYear.Month}
+                    onChange={handlePubYearChange}
                 />
             </div>
             <div className="form-group">
@@ -83,11 +120,11 @@ const CreateBook= () =>{
                     name="Isbn"
                     id="isbn"
                     value={newBook.Isbn}
-
+                    onChange={handleBookChange}
                 />
             </div>
             <div className="form-group">
-                <input type="button" value="back" />
+                <input type="button" value="back" onClick={handleBack} />
                 <input type="submit" value="Create" />
             </div>
         </form>
