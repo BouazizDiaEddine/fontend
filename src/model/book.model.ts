@@ -6,7 +6,7 @@ export default class Book {
     PublicationYear : pubYear
     Isbn       :     string
     NumberInShelf :  number
-    NumberBorrowed? : number
+    NumberBorrowed : number
 
     constructor(BookId: number, Title: string, Author: string, publicationYear : pubYear, isbn : string,numberInShelf: number,numberBorrowed : number  ){
         this.BookId=BookId;
