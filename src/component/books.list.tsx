@@ -5,6 +5,9 @@ import BookService from "../service/book.service";
 const BookList =()=>{
     const [listBooks, setListBooks] = useState<Book[]>([]);
 
+    const deleteHandel = (event: React.MouseEvent<HTMLButtonElement>,bookId: number | undefined ) => {
+            BookService.deleteBook(bookId)
+    };
     useEffect(() => {
         const fetchData = async () => {
             const response = await BookService.getAllBooks<Book>();
@@ -39,9 +42,9 @@ const BookList =()=>{
                             <td>{book.NumberInShelf}</td>
                             <td className="tdtable">
                                 <div className="divtd">
-                                    <input type="button" value="View"></input>
-                                    <input type="button" value="Edit"></input>
-                                    <input type="button" value="Delete"></input>
+                                    <button type="button" value="View">View</button>
+                                    <button type="button" value="Edit">Edit</button>
+                                    <button type="button" value="Delete" onClick={(event) => deleteHandel(event, book.BookId)}>Delete</button>
                                 </div>
                             </td>
                         </tr>
