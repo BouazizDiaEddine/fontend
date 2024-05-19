@@ -58,6 +58,24 @@ export default class BookService {
         return res;
     }
 
+    public static async updateBook<T>( param: number, book: Book): Promise<Response> {
+
+        let res = await axios.put(this.baseURL + "/book/" + param, book)
+            .then(response => {
+                const result = response.data;
+                if(result){
+                    return new Response(true, result.data , "Success", "");
+                }else{
+                    const msg = (result.messageList && result.messageList.length > 0) ? result.messageList[0].text: "Error";
+                    return new Response(false, null, "Error", msg);
+                }
+            })
+            .catch(function (error) {
+                return new Response(false, null, "Error", error);;
+            });
+        return res;
+    }
+
     public static deleteBook( param: number | undefined): Promise<Response> {
         let res = axios.delete(this.baseURL + "/book/" +param)
             .then(response => {
