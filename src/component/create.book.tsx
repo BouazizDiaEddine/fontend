@@ -37,31 +37,41 @@ const CreateBook= () =>{
         NumberInShelf: 0,
         NumberBorrowed: 0,
         Isbn:"",
-        PublicationYear:{Year: newYear.Year, Month: newYear.Month},
+        PublicationYear:newYear,
     });
 
-
-
-
-
-
-    const handleFormSubmit = (event: FormEvent<HTMLFormElement> ) => {
-        // Your form submission logic here
-        const response =  BookService.createBook(newBook);
+    const handleFormSubmit = async (event: FormEvent<HTMLFormElement> ) => {
+            event.preventDefault()
+            const response = await BookService.createBook(newBook);
+            if (response.Status){
+                console.log("done")
+            }else console.log("notdone")
 
     };
 
 
     const handleBookChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
-        setNewBook({ ...newBook, [name]: value });
+
+        let numValue: string | number = value;
+        if (name === "NumberBorrowed" || name === "NumberInShelf" ) {
+            numValue = parseInt(value);
+        }
+        setNewBook({ ...newBook, [name]: numValue });
     };
 
 
     const handlePubYearChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
-        setNewYear({ ...newYear, [name]: value });
-        setNewBook(newBook);
+
+        let numValue: string | number = value;
+        if (name === "Year"  ) {
+            numValue = parseInt(value);
+        }
+        setNewYear({ ...newYear, [name]: numValue });
+        newBook.PublicationYear=newYear;
+        setNewBook(newBook)
+
     };
 
 
