@@ -2,7 +2,9 @@ import "./books.style.css"
 import Book from "../model/book.model";
 import {useEffect, useState} from "react";
 import BookService from "../service/book.service";
+import {BrowserRouter as Router, Route, Link, Routes, useNavigate} from "react-router-dom";
 const BookList =()=>{
+    const navigate = useNavigate();
     const [listBooks, setListBooks] = useState<Book[]>([]);
 
     const deleteHandel = (event: React.MouseEvent<HTMLButtonElement>,bookId: number | undefined ) => {
@@ -43,7 +45,7 @@ const BookList =()=>{
                             <td className="tdtable">
                                 <div className="divtd">
                                     <button type="button" value="View">View</button>
-                                    <button type="button" value="Edit">Edit</button>
+                                    <button type="button" value="Edit" onClick={() => navigate(`/edit/${book.BookId}`)} >Edit</button>
                                     <button type="button" value="Delete" onClick={(event) => deleteHandel(event, book.BookId)}>Delete</button>
                                 </div>
                             </td>

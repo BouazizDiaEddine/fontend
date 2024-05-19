@@ -5,6 +5,7 @@ import Book from "../model/book.model"
 import BooksList from "./books.list";
 import { BrowserRouter as Router, Route, Link,Routes } from "react-router-dom";
 import createBook from "./create.book";
+import EditBook from "./edit.book";
 const Home =()=>{
 
     return(
@@ -16,10 +17,10 @@ const Home =()=>{
             <div>
                 <ul>
                     <li>
-                        <Link to={'/create'} className="nav-link">Create</Link>
+                        <Link to={'/'} className="nav-link">Home</Link>
                     </li>
                     <li>
-                        <Link to={'/'} className="nav-link">Home</Link>
+                        <Link to={'/create'} className="nav-link">Create</Link>
                     </li>
                 </ul>
             </div>
@@ -32,6 +33,7 @@ const Home =()=>{
 
                 <div>
                     <Routes>
+                        <Route path="/edit/:id" Component={ EditBook } />
                         <Route path='/' Component={  BooksList } />
                         <Route path='/create' Component={ createBook } />
                     </Routes>
