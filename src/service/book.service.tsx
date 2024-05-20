@@ -24,7 +24,7 @@ export default class BookService {
 
 
     public static async getBook<T>( param: number): Promise<Response> {
-        let res = await axios.get<T>(this.baseURL + "/book/" + param)
+        let res = await axios.get<T>(this.baseURL + "/books/" + param)
             .then((response: any) => {
                 const result = response.data;
                 if(result){
@@ -42,7 +42,7 @@ export default class BookService {
 
 
     public static async createBook<T>( book: Book): Promise<Response> {
-        let res =  await axios.post(this.baseURL + "/book" ,book)
+        let res =  await axios.post(this.baseURL + "/books" ,book)
             .then(response => {
                 const result = response.data;
                 if(result){
@@ -59,7 +59,7 @@ export default class BookService {
     }
 
     public static async updateBook<T>( param: number, book: Book): Promise<Response> {
-        let res = await axios.put(this.baseURL + "/book/" + param, book)
+        let res = await axios.put(this.baseURL + "/books/" + param, book)
             .then(response => {
                 const result = response.data;
                 if(result){
@@ -76,7 +76,7 @@ export default class BookService {
     }
 
     public static async deleteBook( param: number | undefined): Promise<Response> {
-        let res = await axios.delete(this.baseURL + "/book/" +param)
+        let res = await axios.delete(this.baseURL + "/books/" +param)
             .then(response => {
                 const result = response.data;
                 if(result){
