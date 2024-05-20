@@ -140,6 +140,7 @@ const EditBook= () =>{
                     type="number"
                     name="NumberInShelf"
                     id="numberInShelf"
+                    min="0"
                     value={editBook.NumberInShelf}
                     onChange={handleBookChange}
                     style={{ marginRight: '10px' }}
@@ -149,6 +150,7 @@ const EditBook= () =>{
                     type="number"
                     name="NumberBorrowed"
                     id="NumberBorrowed"
+                    min="0"
                     value={editBook.NumberBorrowed}
                     onChange={handleBookChange}
                 />
@@ -159,6 +161,7 @@ const EditBook= () =>{
                     type="number"
                     name="Year"
                     id="Year"
+                    min="1000"
                     value={editYear.Year}
                     onChange={handlePubYearChange}
                 />

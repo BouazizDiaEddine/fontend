@@ -129,6 +129,7 @@ const CreateBook= () =>{
                     type="number"
                     name="NumberInShelf"
                     id="numberInShelf"
+                    min="0"
                     value={newBook.NumberInShelf}
                     onChange={handleBookChange}
                     style={{ marginRight: '10px' }}
@@ -139,6 +140,7 @@ const CreateBook= () =>{
                     type="number"
                     name="NumberBorrowed"
                     id="NumberBorrowed"
+                    min="0"
                     value={newBook.NumberBorrowed}
                     onChange={handleBookChange}
                 />
@@ -150,6 +152,7 @@ const CreateBook= () =>{
                     type="number"
                     name="Year"
                     id="Year"
+                    min="1000"
                     value={newYear.Year}
                     onChange={handlePubYearChange}
                 />
