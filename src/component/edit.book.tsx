@@ -180,6 +180,8 @@ const EditBook= () =>{
                     name="Isbn"
                     id="isbn"
                     value={editBook.Isbn}
+                    minLength={10}
+                    maxLength={10}
                     onChange={handleBookChange}
                 />
             </div>

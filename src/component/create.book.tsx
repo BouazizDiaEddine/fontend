@@ -170,6 +170,8 @@ const CreateBook= () =>{
                     type="text"
                     name="Isbn"
                     id="isbn"
+                    minLength={10}
+                    maxLength={10}
                     value={newBook.Isbn}
                     onChange={handleBookChange}
                 />
