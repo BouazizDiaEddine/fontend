@@ -3,10 +3,9 @@ import pubYear  from '../model/pubYear.model'
 import React, {FormEvent, useState} from "react";
 import { useNavigate } from 'react-router-dom';
 import BookService from "../service/book.service";
-import Book from "../model/book.model";
-import Response from "../model/response.model";
 import {useTheme} from "../context/theme/theme.context";
 import {toast} from "react-toastify";
+import Modal from "./modal";
 interface BookDetails {
     Title: string;
     Author: string;
@@ -42,12 +41,30 @@ const CreateBook= () =>{
         PublicationYear:newYear,
     });
 
-    const handleFormSubmit = async (event: FormEvent<HTMLFormElement> ) => {
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+
+    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        setIsModalOpen(true);
+    };
+
+    const handleModalClose = () => {
+        setIsModalOpen(false);
+    };
+
+    const handleModalConfirm = () => {
+        setIsModalOpen(false);
+        BookService.createBook(newBook).then((response)=>{
+            if (response.Status){
+                toast.success(response.Messages);
+            }else toast.error(response.Messages);
+        })
+        handleBack();
+    };
+    const handleFormSubmit =  (event: FormEvent<HTMLFormElement> ) => {
             event.preventDefault()
-            const response = await BookService.createBook(newBook);
-        if (response.Status){
-            toast.success(response.Messages);
-        }else toast.error(response.Messages);
 
     };
 
@@ -78,7 +95,7 @@ const CreateBook= () =>{
 
     const { theme } = useTheme();
     return (
-        <form onSubmit={handleFormSubmit}
+        <form onSubmit={handleSubmit}
               style={{
                   ...theme
               } as React.CSSProperties}>
@@ -159,6 +176,12 @@ const CreateBook= () =>{
                 <button type="submit">Create</button>
 
             </div>
+            <Modal
+                isOpen={isModalOpen}
+                onClose={handleModalClose}
+                onConfirm={handleModalConfirm}
+                modalMessage={"are you sure you want to Create: "+newBook.Title+" Author: "+newBook.Author}
+            />
         </form>
     )
 }

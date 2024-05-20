@@ -3,13 +3,15 @@ import React, {FormEvent, useEffect, useState} from "react";
 import {useNavigate, useParams} from 'react-router-dom';
 import BookService from "../service/book.service";
 import Book from "../model/book.model";
-import Response from "../model/response.model";
 import {toast} from "react-toastify";
+import Modal from "./modal";
 
 const EditBook= () =>{
     const navigate = useNavigate();
 
     const { id } = useParams<{ id: string }>();
+
+
     const handleBack = () => {
         navigate('/');
     }
@@ -29,10 +31,37 @@ const EditBook= () =>{
     });
 
 
-    const fetchData = async () => {
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+
+    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        setIsModalOpen(true);
+    };
+
+    const handleModalClose = () => {
+        setIsModalOpen(false);
+    };
+
+    const handleModalConfirm = () => {
+        setIsModalOpen(false);
         if (id) {
             let myId: number = parseInt(id);
-            const response = await BookService.getBook<Book>(myId);
+             BookService.updateBook(myId, editBook).then((response)=>{
+                 if (response.Status){
+                     handleBack();
+                     toast.success(response.Messages);
+                 }else {
+                     toast.error(response.Messages);
+                     fetchData();
+                 }});
+        }
+    };
+
+    const fetchData =  () => {
+        if (id) {
+            let myId: number = parseInt(id);
+              BookService.getBook<Book>(myId).then((response)=>{
             if (response.Status) {
                 const b = response.Data;
                 setEditBook(new Book(b.BookId, b.Title, b.Author, b.PublicationYear, b.Isbn, b.NumberInShelf, b.NumberBorrowed));
@@ -40,30 +69,14 @@ const EditBook= () =>{
             } else {
                 toast.error(response.Messages);
                 return null;
-            }
+            }});
         }
     };
-    useEffect(() => {
 
+
+    useEffect(() => {
         fetchData();
     }, []);
-
-    const handleFormSubmit = async (event: FormEvent<HTMLFormElement> ) => {
-        event.preventDefault()
-            if (id) {
-                let myId: number = parseInt(id);
-            const response = await BookService.updateBook(myId, editBook);
-                if (response.Status){
-                    handleBack();
-                    toast.success(response.Messages);
-                }else {
-                    toast.error(response.Messages);
-                    fetchData();
-                }
-        }
-
-    };
-
 
     const handleBookChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
@@ -90,7 +103,8 @@ const EditBook= () =>{
     };
 
     return (
-        <form onSubmit={handleFormSubmit}>
+
+            <form onSubmit={handleSubmit}>
             <h2>Edit Book </h2>
             <div>
                 <label htmlFor="title">Title:</label>
@@ -165,6 +179,12 @@ const EditBook= () =>{
                 <button type="submit">Edit</button>
 
             </div>
+                <Modal
+                    isOpen={isModalOpen}
+                    onClose={handleModalClose}
+                    onConfirm={handleModalConfirm}
+                    modalMessage={"are you sure you want to edit: "+editBook.Title}
+                />
         </form>
     )
 }

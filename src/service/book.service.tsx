@@ -35,7 +35,7 @@ export default class BookService {
                 }
             })
             .catch(function (error) {
-                return new Response(false, null, error.message(), error);
+                return new Response(false, null, error.message, error);
             });
         return res
     }
@@ -46,32 +46,31 @@ export default class BookService {
             .then(response => {
                 const result = response.data;
                 if(result){
-                    return new Response(true, result.data , "Success", "");
+                    return new Response(true, result.data , "Book was created successfully", "");
                 }else{
                     const msg = (result.messageList && result.messageList.length > 0) ? result.messageList[0].text: "Error";
                     return new Response(false, null, "Error", msg);
                 }
             })
             .catch(function (error) {
-                return new Response(false, null, "Error", error);
+                return new Response(false, null, error.message, error);
             });
         return res;
     }
 
     public static async updateBook<T>( param: number, book: Book): Promise<Response> {
-
         let res = await axios.put(this.baseURL + "/book/" + param, book)
             .then(response => {
                 const result = response.data;
                 if(result){
-                    return new Response(true, result.data , "Success", "");
+                    return new Response(true, result.data , "Book was edited successfully", "");
                 }else{
                     const msg = (result.messageList && result.messageList.length > 0) ? result.messageList[0].text: "Error";
-                    return new Response(false, null, "Error", msg);
+                    return new Response(false, null, result.data, msg);
                 }
             })
             .catch(function (error) {
-                return new Response(false, null, "Error", error);;
+                return new Response(false, null, error.message, error);;
             });
         return res;
     }
