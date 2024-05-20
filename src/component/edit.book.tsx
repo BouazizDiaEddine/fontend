@@ -5,6 +5,7 @@ import BookService from "../service/book.service";
 import Book from "../model/book.model";
 import {toast} from "react-toastify";
 import Modal from "./modal";
+import {useTheme} from "../context/theme/theme.context";
 
 const EditBook= () =>{
     const navigate = useNavigate();
@@ -102,9 +103,14 @@ const EditBook= () =>{
 
     };
 
+    const { theme } = useTheme();
+
     return (
 
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit}
+                  style={{
+                      ...theme
+                  } as React.CSSProperties}>
             <h2>Edit Book </h2>
             <div>
                 <label htmlFor="title">Title:</label>
