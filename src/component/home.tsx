@@ -6,13 +6,30 @@ import BooksList from "./books.list";
 import { BrowserRouter as Router, Route, Link,Routes } from "react-router-dom";
 import createBook from "./create.book";
 import EditBook from "./edit.book";
+import {useTheme} from "../context/theme/theme.context";
+import {toast, ToastContainer} from "react-toastify";
 const Home =()=>{
+
+
+
+
+    const { theme, setCurrentTheme } = useTheme();
+
+    const handleToggle = () => {
+        // Check the current theme and set the opposite theme
+        setCurrentTheme(currentTheme => (currentTheme === 'yellow' ? 'green' : 'yellow'));
+    };
+
+
 
     return(
         <>
             <Router>
         <article
-        className="article-header">
+        className="article-header"
+        style={{
+            ...theme
+        } as React.CSSProperties}>
       <nav>
             <div>
                 <ul>
@@ -28,6 +45,12 @@ const Home =()=>{
             <header>
                 <h1>Byfood Library</h1>
             </header>
+
+                <button  style={{ backgroundColor: 'orange', color: 'white' }}
+                    onClick={handleToggle}>
+                    Switch Theme
+                </button>
+
         </article>
         <section className="section-content">
 
@@ -41,6 +64,10 @@ const Home =()=>{
 
         </section>
         </Router>
+            <ToastContainer
+                autoClose={5000}
+                hideProgressBar={true}
+            />
         </>
     )
 }

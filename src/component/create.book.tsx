@@ -1,10 +1,12 @@
-import pubYear  from '../model/pubYear.model'
-import React, {FormEvent, useEffect, useState} from "react";
 import "./create.book.style.css"
+import pubYear  from '../model/pubYear.model'
+import React, {FormEvent, useState} from "react";
 import { useNavigate } from 'react-router-dom';
 import BookService from "../service/book.service";
 import Book from "../model/book.model";
 import Response from "../model/response.model";
+import {useTheme} from "../context/theme/theme.context";
+import {toast} from "react-toastify";
 interface BookDetails {
     Title: string;
     Author: string;
@@ -43,9 +45,9 @@ const CreateBook= () =>{
     const handleFormSubmit = async (event: FormEvent<HTMLFormElement> ) => {
             event.preventDefault()
             const response = await BookService.createBook(newBook);
-            if (response.Status){
-                console.log("done")
-            }else console.log("notdone")
+        if (response.Status){
+            toast.success(response.Messages);
+        }else toast.error(response.Messages);
 
     };
 
@@ -74,9 +76,12 @@ const CreateBook= () =>{
 
     };
 
-
+    const { theme } = useTheme();
     return (
-        <form onSubmit={handleFormSubmit}>
+        <form onSubmit={handleFormSubmit}
+              style={{
+                  ...theme
+              } as React.CSSProperties}>
             <h2>Create New Book</h2>
             <div>
                 <label htmlFor="title">Title:</label>
@@ -100,8 +105,9 @@ const CreateBook= () =>{
                     required
                 />
             </div>
-            <div className="form-group" id="inShlefBorrowed">
-                <label htmlFor="numberInShelf">Number in Shelf:</label>
+            <div  id="inShlefBorrowed">
+                <div className="form-group" >
+                    <label htmlFor="numberInShelf">Copies available:</label>
                 <input
                     type="number"
                     name="NumberInShelf"
@@ -109,8 +115,9 @@ const CreateBook= () =>{
                     value={newBook.NumberInShelf}
                     onChange={handleBookChange}
                     style={{ marginRight: '10px' }}
-                />
-                <label htmlFor="numberInShelf">Number Borrowed:</label>
+                /></div>
+                <div className="form-group">
+                    <label htmlFor="numberInShelf">Copies Borrowed:</label>
                 <input
                     type="number"
                     name="NumberBorrowed"
@@ -118,6 +125,7 @@ const CreateBook= () =>{
                     value={newBook.NumberBorrowed}
                     onChange={handleBookChange}
                 />
+            </div>
             </div>
             <div className="form-group" id="publicationYear">
                 <label htmlFor="publicationYearYear">Publication Date (Optional):</label>

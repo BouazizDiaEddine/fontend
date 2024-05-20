@@ -4,6 +4,10 @@ import {useEffect, useState} from "react";
 import BookService from "../service/book.service";
 import {BrowserRouter as Router, Route, Link, Routes, useNavigate} from "react-router-dom";
 import BookDetail from "./book.detail";
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+
 const BookList =()=>{
     const navigate = useNavigate();
     const [listBooks, setListBooks] = useState<Book[]>([]);
@@ -24,26 +28,31 @@ const BookList =()=>{
         setShowBookDetail(false);
     }
 
-    const deleteHandel = (event: React.MouseEvent<HTMLButtonElement>,bookId: number | undefined ) => {
-            BookService.deleteBook(bookId)
-    };
 
-    const fetchData = async () => {
-        const response = await BookService.getAllBooks<Book>();
-        if (response.Status) {
-            const books = response.Data.map((b: any) => new Book(b.BookId, b.Title, b.Author,b.PublicationYear , b.Isbn,b.NumberInShelf,b.NumberBorrowed));
-            setListBooks(books);
-        } else {
-            //todo : dialog to tell something went wrong
-            console.error("Error fetching books:", response.Messages, response.Exception);
-        }
-    };
+    const fetchData =  () => {
+        BookService.getAllBooks<Book>().then((response) => {
+            if (response.Status) {
+                const books = response.Data.map((b: any) => new Book(b.BookId, b.Title, b.Author, b.PublicationYear, b.Isbn, b.NumberInShelf, b.NumberBorrowed));
+                setListBooks(books);
+            } else {
+                toast.error(response.Messages);
+            }
+        });
+    }
 
 
     useEffect(() => {
         fetchData();
     }, []);
 
+    const deleteHandel = async (event: React.MouseEvent<HTMLButtonElement>,bookId: number | undefined ) => {
+        event.preventDefault()
+        const  response= await BookService.deleteBook(bookId)
+        if (response.Status){
+            toast.success(response.Messages);
+            fetchData()
+        }else toast.error(response.Messages);
+    };
 
     return(
         <div>

@@ -1,10 +1,10 @@
 import pubYear  from '../model/pubYear.model'
 import React, {FormEvent, useEffect, useState} from "react";
-import "./create.book.style.css"
 import {useNavigate, useParams} from 'react-router-dom';
 import BookService from "../service/book.service";
 import Book from "../model/book.model";
 import Response from "../model/response.model";
+import {toast} from "react-toastify";
 
 const EditBook= () =>{
     const navigate = useNavigate();
@@ -28,21 +28,23 @@ const EditBook= () =>{
         PublicationYear:{Year: editYear.Year, Month: editYear.Month},
     });
 
-    useEffect(() => {
-            const fetchData = async () => {
-                if (id) {
-                    let myId: number = parseInt(id);
+
+    const fetchData = async () => {
+        if (id) {
+            let myId: number = parseInt(id);
             const response = await BookService.getBook<Book>(myId);
-                    if (response.Status) {
-                        const b = response.Data;
-                        setEditBook(new Book(b.BookId, b.Title, b.Author, b.PublicationYear, b.Isbn, b.NumberInShelf, b.NumberBorrowed));
-                        setEditYear(b.PublicationYear);
-                    } else {
-                        console.error('Error fetching book:', response.Messages, response.Exception);
-                        return null;
-                    }
-                }
-                };
+            if (response.Status) {
+                const b = response.Data;
+                setEditBook(new Book(b.BookId, b.Title, b.Author, b.PublicationYear, b.Isbn, b.NumberInShelf, b.NumberBorrowed));
+                setEditYear(b.PublicationYear);
+            } else {
+                toast.error(response.Messages);
+                return null;
+            }
+        }
+    };
+    useEffect(() => {
+
         fetchData();
     }, []);
 
@@ -51,11 +53,15 @@ const EditBook= () =>{
             if (id) {
                 let myId: number = parseInt(id);
             const response = await BookService.updateBook(myId, editBook);
-            if (response.Status) {
-                console.log("done")
-            } else console.log("notdone")
+                if (response.Status){
+                    handleBack();
+                    toast.success(response.Messages);
+                }else {
+                    toast.error(response.Messages);
+                    fetchData();
+                }
         }
-         handleBack();
+
     };
 
 

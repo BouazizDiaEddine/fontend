@@ -1,21 +1,22 @@
-import {useState} from "react";
+import "../index.css"
+import React, {useState} from "react";
 import Book from "../model/book.model";
 import pubYear from "../model/pubYear.model";
+import {useTheme} from "../context/theme/theme.context";
 
 type Props={
     onClose:()=>void;
     detailBook :Book;
 }
 const BookDetail=(props : Props)=>{
-
-
-/*    const onClose=()=> {
-        isOpen=false;
-    }*/
-
+    const { theme } = useTheme();
     return(
-        <div className="modal">
-    <div className="modal-content">
+        <div className="modal"
+        >
+    <div className="modal-content"
+         style={{
+             ...theme
+         } as React.CSSProperties}>
         <div className="header-detail"><h2>Book Details</h2>
         <span className="close" onClick={props.onClose}>Close</span></div>
         <p><strong>Book ID:</strong> {props.detailBook.BookId}</p>
